@@ -19,26 +19,36 @@ module Correios
       1 => 0
     }
 
-    attr_reader :sro, :numbers, :verification
+    attr_reader :sro, :numbers, :verification_digit
 
     def initialize(sro)
       @sro = sro
       @sro =~ /^[A-Z|a-z]{2}([0-9]{8})([0-9])BR$/
       @numbers = $1
-      @verification = $2.to_i
+      @verification_digit = $2.to_i
     end
 
     def valid?
-      array_of_numbers = numbers.split("").map(&:to_i)
-      total = array_of_numbers.zip(WEIGHTING_FACTORS).
-        map { |a| a.inject(:*) }.inject(:+)
-
-      digit = total % 11
-
-      result = CONTROL_DIGIT[digit] || (11-digit)
-      result == verification
+      result == verification_digit
     end
 
+    private
+
+    def result
+      CONTROL_DIGIT[mod] || (11-mod)
+    end
+
+    def mod
+      weighted_mean % 11
+    end
+
+    def weighted_mean
+      sro_array.zip(WEIGHTING_FACTORS).map { |a| a.inject(:*) }.inject(:+)
+    end
+
+    def sro_array
+      numbers.split("").map(&:to_i)
+    end
 
   end
 end
