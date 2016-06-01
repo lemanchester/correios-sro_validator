@@ -1,5 +1,7 @@
 # Correios::SROValidator
 
+[![Build Status](https://travis-ci.org/lemanchester/correios-sro_validator.svg?branch=master)](https://travis-ci.org/lemanchester/correios-sro_validator)
+
 Validates the SRO (Sistema de Rastreamento de Objetos dos Correios) structure to guarantee it's a Correios SRO.
 
 ![](http://prodis.net.br/images/ruby/2011/correios_logo.png)
