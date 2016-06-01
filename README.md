@@ -2,6 +2,8 @@
 
 Validates the SRO (Sistema de Rastreamento de Objetos dos Correios) structure to guarantee it's a Correios SRO.
 
+![](http://prodis.net.br/images/ruby/2011/correios_logo.png)
+
 Example of SRO:
 
 `LX473124829BR`
