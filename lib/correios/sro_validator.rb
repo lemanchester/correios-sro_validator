@@ -19,23 +19,23 @@ module Correios
       1 => 0
     }
 
-    attr_reader :sro
+    attr_reader :sro, :numbers, :verification
 
     def initialize(sro)
       @sro = sro
+      @sro =~ /^[A-Z|a-z]{2}([0-9]{8})([0-9])BR$/
+      @numbers = $1
+      @verification = $2.to_i
     end
 
     def valid?
-      regexp_result = sro.match(/^[A-Z|a-z]{2}([0-9]{8})([0-9])BR$/)
-      numbers = regexp_result.values_at(1).first
-      verification = regexp_result.values_at(2).first.to_i
-
       array_of_numbers = numbers.split("").map(&:to_i)
-      total = array_of_numbers.zip(WEIGHTING_FACTORS).map { |a| a.inject(:*) }.inject(:+)
+      total = array_of_numbers.zip(WEIGHTING_FACTORS).
+        map { |a| a.inject(:*) }.inject(:+)
 
-      dig = total % 11
+      digit = total % 11
 
-      result = CONTROL_DIGIT[dig] || (11-dig)
+      result = CONTROL_DIGIT[digit] || (11-digit)
       result == verification
     end
 
