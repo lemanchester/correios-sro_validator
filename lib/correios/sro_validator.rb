@@ -21,10 +21,10 @@ module Correios
 
     attr_reader :sro, :numbers, :verification_digit
 
-    def initialize(sro)
+    def initialize(sro, suffix_match = 'BR')
       @sro = sro
-      @sro =~ /^[A-Z|a-z]{2}([0-9]{8})([0-9])BR$/
-      @numbers = $1
+      @sro =~ /^[A-Z|a-z]{2}([0-9]{8})([0-9])#{suffix_match}$/
+      @numbers = ($1 || "")
       @verification_digit = $2.to_i
     end
 
@@ -39,11 +39,13 @@ module Correios
     end
 
     def mod
-      weighted_mean % 11
+      @mod ||= weighted_mean % 11
     end
 
     def weighted_mean
-      sro_array.zip(WEIGHTING_FACTORS).map { |a| a.inject(:*) }.inject(:+)
+      sro_array.zip(WEIGHTING_FACTORS)
+        .map { |a| a.inject(:*) }
+        .inject(:+) || Float::INFINITY
     end
 
     def sro_array
