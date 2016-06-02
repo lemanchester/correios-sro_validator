@@ -21,6 +21,12 @@ module Correios
 
     attr_reader :sro, :numbers, :verification_digit
 
+
+    # Initializer the SROValidator
+    #
+    # @param [String] sro describe sro
+    # @param [String] suffix_match = 'BR' the regex match suffix (BR as default)
+    # @return [self] SROValidator
     def initialize(sro, suffix_match = 'BR')
       @sro = sro
       @sro =~ /^[A-Z|a-z]{2}([0-9]{8})([0-9])#{suffix_match}$/
@@ -28,6 +34,10 @@ module Correios
       @verification_digit = $2.to_i
     end
 
+    # Return if the SRO is valid or not
+    #
+    # @return [True] true when the 9th digit matchs the validation algorithm
+    # @return [False] false otherwise
     def valid?
       result == verification_digit
     end
