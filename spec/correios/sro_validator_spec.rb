@@ -18,6 +18,20 @@ describe Correios::SROValidator do
       it { expect(subject.valid?).to be false }
     end
 
+    context "given a random string" do
+      let(:sro) { '31231231231231' }
+
+      it { expect(subject.valid?).to be false }
+    end
+
+    context "given a valid SRO with diff suffix" do
+      subject { described_class.new(sro, 'CN') }
+
+      let(:sro) { 'LX473124829CN' }
+
+      it { expect(subject.valid?).to be true }
+    end
+
   end
 
 end
