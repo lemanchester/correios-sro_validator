@@ -28,7 +28,7 @@ module Correios
     # @param [String] suffix_match = 'BR' the regex match suffix (BR as default)
     # @return [self] SROValidator
     def initialize(sro, suffix_match = 'BR')
-      @sro = sro
+      @sro = sro.to_s.strip.upcase
       @sro =~ /^[A-Z|a-z]{2}([0-9]{8})([0-9])#{suffix_match}$/
       @numbers = ($1 || "")
       @verification_digit = $2.to_i
