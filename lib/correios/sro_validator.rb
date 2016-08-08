@@ -12,24 +12,24 @@ module Correios
   #
   class SROValidator
 
-    WEIGHTING_FACTORS = [8, 6, 4, 2, 3, 5, 9, 7]
+    WEIGHTING_FACTORS = [8, 6, 4, 2, 3, 5, 9, 7].freeze
 
     CONTROL_DIGIT = {
       0 => 5,
       1 => 0
-    }
+    }.freeze
 
-    attr_reader :sro, :numbers, :verification_digit
-
+    attr_reader :sro, :sanitized_sro, :numbers, :verification_digit
 
     # Initializer the SROValidator
     #
-    # @param [String] sro describe sro
+    # @param [String] sro Tracking Code like: LX473124829BR
     # @param [String] suffix_match = 'BR' the regex match suffix (BR as default)
     # @return [self] SROValidator
     def initialize(sro, suffix_match = 'BR')
-      @sro = sro.to_s.strip.upcase
-      @sro =~ /^[A-Z|a-z]{2}([0-9]{8})([0-9])#{suffix_match}$/
+      @sro = sro
+      @sanitized_sro = sro.to_s.strip.upcase
+      @sanitized_sro =~ /^[A-Z|a-z]{2}([0-9]{8})([0-9])#{suffix_match}$/
       @numbers = ($1 || "")
       @verification_digit = $2.to_i
     end
